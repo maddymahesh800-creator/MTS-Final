@@ -5,6 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard';
 import { AccountDetailsComponent } from './pages/account-details/account-details';
 import { TransactionComponent } from './pages/transaction/transaction';
 import { HistoryComponent } from './pages/history/history';
+import { RewardsComponent } from './pages/rewards/rewards';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },   // 👈 SHOW LOGIN FIRST
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'account-details', component: AccountDetailsComponent },
   { path: 'transaction', component: TransactionComponent },
   { path: 'history', component: HistoryComponent },
+  { path: 'rewards', component: RewardsComponent },
   { path: '**', redirectTo: 'login' }   // fallback route
 ];

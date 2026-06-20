@@ -94,6 +94,21 @@
   border-left-color: #1b4f72;
 }
 
+/* Rewards Card */
+.action-card.rewards-card {
+  border-left-color: #f39c12;
+  background: linear-gradient(135deg, rgba(243, 156, 18, 0.05) 0%, rgba(230, 126, 34, 0.05) 100%);
+}
+
+.action-card.rewards-card:hover {
+  border-left-color: #e67e22;
+  background: linear-gradient(135deg, rgba(243, 156, 18, 0.1) 0%, rgba(230, 126, 34, 0.1) 100%);
+}
+
+.action-card.rewards-card h3 {
+  color: #f39c12;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .dashboard-container {

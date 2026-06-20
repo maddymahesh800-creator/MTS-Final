@@ -30,6 +30,9 @@ public class AccountService implements IAccountService {
     @Autowired
     TransactionLogRepository transactionLogRepo;
 
+    @Autowired
+    IRewardService rewardService;
+
     @Override
     public List<AccountDTO> getAllAccounts() {
         logger.info("Fetching all accounts");
@@ -108,7 +111,23 @@ public class AccountService implements IAccountService {
         }
 
         TransactionLog transactionLog = new TransactionLog(fromAccountId, toAccountId, amount, status, failureMessage);
-        return TransactionLogDTO.toDTO(transactionLogRepo.save(transactionLog));
+        TransactionLog savedTransaction = transactionLogRepo.save(transactionLog);
+        
+        // Award rewards if transaction is eligible
+        try {
+            rewardService.awardRewardsForTransaction(
+                savedTransaction.getTransactionId(),
+                fromAccountId,
+                toAccountId,
+                amount,
+                status
+            );
+        } catch (Exception e) {
+            logger.warn("Failed to award rewards for transaction: {}", savedTransaction.getTransactionId(), e);
+            // Don't fail the transaction if reward processing fails
+        }
+        
+        return TransactionLogDTO.toDTO(savedTransaction);
     }
 
     @Override

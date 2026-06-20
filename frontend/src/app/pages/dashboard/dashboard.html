@@ -3,7 +3,7 @@
   <!-- Top Header -->
   <div class="dashboard-top">
 
-    <h2>Welcome {{ user?.holderName }} !</h2>
+    <h2>Welcome {{ user.holderName }} !</h2>
 
     <button class="logout-btn" (click)="logout()">
       Logout
@@ -15,7 +15,7 @@
   <div class="balance-card">
     <p>Available Balance</p>
     <div class="balance-amount">
-      <h1>₹ {{ user?.balance }}</h1>
+      <h1>₹ {{ user.balance }}</h1>
     </div>
   </div>
 
@@ -35,6 +35,11 @@
     <div class="action-card" routerLink="/history">
       <h3>Transaction History</h3>
       <p>View all past transactions</p>
+    </div>
+
+    <div class="action-card rewards-card" routerLink="/rewards">
+      <h3>⭐ Rewards</h3>
+      <p>Earn points on transfers</p>
     </div>
 
   </div>

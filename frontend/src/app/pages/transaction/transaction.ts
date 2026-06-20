@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../core/services/account.service';
+import { RewardService } from '../../core/services/reward.service';
 import { Account } from '../../core/models/account.model';
 
 @Component({
@@ -27,7 +28,8 @@ export class TransactionComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private rewardService: RewardService
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +89,15 @@ export class TransactionComponent implements OnInit {
     }).subscribe({
       next: () => {
         alert('Transfer Successful');
+        // Warm rewards cache so it's available immediately
+        this.rewardService.getActiveRewards(this.user.id).subscribe({
+          next: () => {
+            // no-op; just warm the cache
+          },
+          error: () => {
+            // ignore reward warm errors
+          }
+        });
         this.router.navigate(['/dashboard']);
       },
       error: () => {

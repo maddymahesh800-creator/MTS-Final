@@ -1,0 +1,128 @@
+<div class="rewards-container">
+  <!-- Header -->
+  <div class="rewards-header">
+    <h1>Rewards Dashboard</h1>
+    <button class="back-button" (click)="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <!-- Total Rewards Card -->
+  <div class="total-rewards-card">
+    <div class="rewards-info">
+      <h2>Total Reward Points</h2>
+      <p class="total-points">{{ totalRewards }}</p>
+      <span class="points-label">Points Earned</span>
+    </div>
+    <div class="rewards-icon">⭐</div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="error-message">
+    <span class="error-icon">⚠️</span>
+    {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading your rewards...</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-section" *ngIf="!loading">
+    <div class="tab-buttons">
+      <button 
+        class="tab-button" 
+        [class.active]="selectedTab === 'active'"
+        (click)="switchTab('active')">
+        Active Rewards ({{ activeRewards.length }})
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="selectedTab === 'all'"
+        (click)="switchTab('all')">
+        All Rewards ({{ allRewards.length }})
+      </button>
+    </div>
+
+    <!-- Rewards Table -->
+    <div class="rewards-table-container">
+      <table *ngIf="filteredRewards.length > 0" class="rewards-table">
+        <thead>
+          <tr>
+            <th>Points</th>
+            <th>Transaction ID</th>
+            <th>Amount (Rs.)</th>
+            <th>Date Earned</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reward of filteredRewards" class="reward-row" [class.inactive]="!reward.isActive">
+            <td class="points-cell">
+              <span class="points-badge">{{ reward.points }}</span>
+            </td>
+            <td class="transaction-id">{{ reward.transactionId }}</td>
+            <td class="amount">{{ reward.transactionAmount | number: '1.0-2' }}</td>
+            <td class="date">{{ formatDate(reward.rewardCreatedAt) }}</td>
+            <td class="status">
+              <span [class]="'status-badge ' + (reward.isActive ? 'active' : 'inactive')">
+                {{ reward.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td class="action">
+              <button 
+                *ngIf="reward.isActive"
+                class="deactivate-button"
+                (click)="deactivateReward(reward)"
+                title="Deactivate this reward">
+                ✓ Deactivate
+              </button>
+              <span *ngIf="!reward.isActive" class="deactivated-text">Deactivated</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="filteredRewards.length === 0" class="empty-state">
+        <div class="empty-icon">🎁</div>
+        <h3>No Rewards Yet</h3>
+        <p *ngIf="selectedTab === 'active'">
+          Complete transactions above Rs. 100 to earn reward points!
+        </p>
+        <p *ngIf="selectedTab === 'all'">
+          You haven't earned any rewards yet.
+        </p>
+        <button class="action-button" (click)="router.navigate(['/transaction'])">
+          Make a Transfer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rewards Info Section -->
+  <div class="rewards-info-section" *ngIf="!loading && filteredRewards.length > 0">
+    <h3>How Rewards Work</h3>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">📊</div>
+        <h4>Earning Rules</h4>
+        <ul>
+          <li>Transfers above Rs. 100</li>
+          <li>1 point per Rs. 100</li>
+          <li>Points rounded down</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">✅</div>
+        <h4>Eligibility</h4>
+        <ul>
+          <li>Successful transfers only</li>
+          <li>Different recipient accounts</li>
+          <li>Immediate point credit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
